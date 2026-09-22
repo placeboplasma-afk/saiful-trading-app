@@ -1,4 +1,4 @@
-package com.saifulothman.tradingapp
+package com.saifulothman.tradingapp 
 
 import android.annotation.SuppressLint
 import android.app.Activity
