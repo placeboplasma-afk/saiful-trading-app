@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#020617" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="bandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.4" />
+    </linearGradient>
+    <linearGradient id="candleUp" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
+  <rect width="504" height="504" x="4" y="4" rx="111" fill="none" stroke="#334155" stroke-width="3" stroke-opacity="0.6" />
+
+  <!-- Bollinger Bands Flowing Path -->
+  <path d="M 40 340 C 140 310, 240 240, 360 160 C 420 120, 460 110, 472 105" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linecap="round" opacity="0.8" />
+  <path d="M 40 380 C 150 350, 250 300, 370 230 C 430 195, 460 185, 472 180" fill="none" stroke="#818cf8" stroke-width="4" stroke-dasharray="8 6" opacity="0.9" />
+  <path d="M 40 420 C 150 400, 260 360, 370 300 C 430 270, 460 260, 472 255" fill="none" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" opacity="0.8" />
+
+  <!-- Candlesticks -->
+  <!-- Candle 1 (Down) -->
+  <line x1="120" y1="290" x2="120" y2="380" stroke="#f43f5e" stroke-width="4" stroke-linecap="round" />
+  <rect x="106" y="315" width="28" height="45" rx="4" fill="#f43f5e" />
+
+  <!-- Candle 2 (Extreme Reversal Buy) -->
+  <line x1="185" y1="270" x2="185" y2="405" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
+  <rect x="171" y="300" width="28" height="75" rx="4" fill="url(#candleUp)" filter="url(#glow)" />
+
+  <!-- Candle 3 (CSAK Breakout) -->
+  <line x1="250" y1="200" x2="250" y2="330" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
+  <rect x="236" y="215" width="28" height="90" rx="4" fill="url(#candleUp)" />
+
+  <!-- Candle 4 (Reentry 5-Star) -->
+  <line x1="315" y1="160" x2="315" y2="280" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" />
+  <rect x="301" y="180" width="28" height="70" rx="4" fill="url(#goldGrad)" filter="url(#glow)" />
+
+  <!-- Candle 5 (CSM Momentum) -->
+  <line x1="380" y1="90" x2="380" y2="220" stroke="#34d399" stroke-width="4" stroke-linecap="round" />
+  <rect x="366" y="110" width="28" height="85" rx="4" fill="url(#candleUp)" />
+
+  <!-- Top 5-Star Badge & Text -->
+  <g transform="translate(106, 45)">
+    <rect width="300" height="50" rx="25" fill="#0f172a" stroke="#d97706" stroke-width="2" />
+    <text x="150" y="32" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="#fbbf24" text-anchor="middle" letter-spacing="3">
+      ★ BBMA OMA ALLY ★
+    </text>
+  </g>
+
+  <!-- Bottom Brand Text -->
+  <text x="256" y="470" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="24" fill="#94a3b8" text-anchor="middle" letter-spacing="4">
+    SIGNAL &amp; ADVISOR
+  </text>
+</svg>

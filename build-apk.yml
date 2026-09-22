@@ -1,0 +1,77 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            web/package-lock.json
+
+      - name: Build web app
+        shell: bash
+        run: |
+          set -e
+          if [ -f package.json ]; then
+            npm ci || npm install
+            npm run build
+          elif [ -f web/package.json ]; then
+            cd web
+            npm ci || npm install
+            npm run build
+            cd ..
+          else
+            echo "No package.json found. Skipping web build."
+          fi
+
+      - name: Copy web build into Android assets
+        shell: bash
+        run: |
+          set -e
+          mkdir -p app/src/main/assets
+          if [ -d dist ]; then
+            rm -rf app/src/main/assets/*
+            cp -R dist/. app/src/main/assets/
+          elif [ -d web/dist ]; then
+            rm -rf app/src/main/assets/*
+            cp -R web/dist/. app/src/main/assets/
+          else
+            echo "No dist directory found; using existing Android assets."
+          fi
+
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: saiful-othman-trading-app-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
