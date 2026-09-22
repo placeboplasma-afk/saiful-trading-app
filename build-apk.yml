@@ -16,58 +16,39 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
 
-      - name: Set up Node.js
+      - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm install
 
       - name: Build web app
-        shell: bash
-        run: |
-          set -e
-          if [ -f package.json ]; then
-            npm ci || npm install
-            npm run build
-          elif [ -f web/package.json ]; then
-            cd web
-            npm ci || npm install
-            npm run build
-            cd ..
-          else
-            echo "No package.json found. Skipping web build."
-          fi
+        run: npm run build
 
       - name: Copy web build into Android assets
         shell: bash
         run: |
           set -e
-          mkdir -p app/src/main/assets
-          if [ -d dist ]; then
-            rm -rf app/src/main/assets/*
-            cp -R dist/. app/src/main/assets/
-          elif [ -d web/dist ]; then
-            rm -rf app/src/main/assets/*
-            cp -R web/dist/. app/src/main/assets/
-          else
-            echo "No dist directory found; using existing Android assets."
-          fi
+          rm -rf app/src/main/assets/www
+          mkdir -p app/src/main/assets/www
+          cp -R dist/. app/src/main/assets/www/
 
-      - name: Make Gradle executable
-        run: chmod +x gradlew
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
