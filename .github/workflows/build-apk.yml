@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Android APK
 
 on:
   workflow_dispatch:
@@ -21,16 +21,36 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Prepare web package
+        run: cp web-package.json package.json
+
+      - name: Install web dependencies
+        run: npm install
+
+      - name: Build web app
+        run: npx vite build
+
+      - name: Copy web app into Android assets
+        run: |
+          mkdir -p app/src/main/assets/www
+          rm -rf app/src/main/assets/www/*
+          cp -R dist/* app/src/main/assets/www/
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.9'
 
       - name: Build APK
-        run: gradle assembleDebug
+        run: gradle :app:assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: saiful-trading-app-debug-apk
-          path: '**/build/outputs/apk/debug/*.apk'
+          path: app/build/outputs/apk/debug/*.apk
