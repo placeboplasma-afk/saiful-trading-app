@@ -1,10 +1,10 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -30,7 +30,8 @@ jobs:
         run: cp web-package.json package.json
 
       - name: Install web dependencies
-      run: npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps
+
       - name: Build web app
         run: npx vite build
 
